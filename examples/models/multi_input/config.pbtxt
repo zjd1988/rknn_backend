@@ -1,0 +1,23 @@
+name: "multi_input"
+backend: "rknn"
+max_batch_size : 1
+input [
+  {
+    name: "input"
+    data_type: TYPE_INT8
+    dims: [ 1, 128, 128 ]
+  },
+  {
+    name: "input1"
+    data_type: TYPE_INT8
+    dims: [ 3, 128, 128 ]
+  }
+
+]
+output [
+  {
+    name: "output"
+    data_type: TYPE_FP32
+    dims: [ 8, 128, 128 ]
+  }
+]
