@@ -2,7 +2,7 @@
 ## 编译步骤
 ### 1 拉取triton-server仓库 
 ```
-# 以我本地的目录和环境为例
+# 以我本地的目录和环境为例，以下都是在3588开发板进行，交叉编译暂时没尝试
 
 cd /data/github_codes
 git clone https://github.com/triton-inference-server/server.git
@@ -49,6 +49,81 @@ cmake \
     "-DTRITON_BACKEND_REPO_TAG:STRING=r23.05" "-DTRITON_ENABLE_GPU:BOOL=OFF" \
     "-DTRITON_ENABLE_MALI_GPU:BOOL=ON" "-DTRITON_ENABLE_STATS:BOOL=ON" \
     "-DTRITON_ENABLE_METRICS:BOOL=ON" ..
+#make -j16 VERBOSE=1 install
+make -j install
+mkdir -p /data/github_codes/server/build_test/opt/tritonserver/backends
+rm -fr /data/github_codes/server/build_test/opt/tritonserver/backends/rknn
+cp -r /data/github_codes/server/build_test/rknn/install/backends/rknn /data/github_codes/server/build_test/opt/tritonserver/backends
+#
+# end 'rknn' backend
+########
+```
+### 5 完整的编译脚本如下(option)
+```
+#!/usr/bin/env bash
+
+#
+# Build script for Triton Inference Server
+#
+
+# Exit script immediately if any command fails
+set -e
+set -x
+
+########
+# Triton core library and tritonserver executable
+#
+mkdir -p /data/github_codes/server/build_test/tritonserver/build
+cd /data/github_codes/server/build_test/tritonserver/build
+cmake \
+    "-DTRT_VERSION=${TRT_VERSION}" "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}" \
+    "-DVCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}" "-DCMAKE_BUILD_TYPE=Release" \
+    "-DCMAKE_INSTALL_PREFIX:PATH=/data/github_codes/server/build_test/tritonserver/install" \
+    "-DTRITON_VERSION:STRING=2.34.0" "-DTRITON_COMMON_REPO_TAG:STRING=r23.05" \
+    "-DTRITON_CORE_REPO_TAG:STRING=r23.05" "-DTRITON_BACKEND_REPO_TAG:STRING=r23.05" \
+    "-DTRITON_THIRD_PARTY_REPO_TAG:STRING=r23.05" "-DTRITON_ENABLE_LOGGING:BOOL=ON" \
+    "-DTRITON_ENABLE_STATS:BOOL=ON" "-DTRITON_ENABLE_METRICS:BOOL=ON" \
+    "-DTRITON_ENABLE_METRICS_GPU:BOOL=OFF" "-DTRITON_ENABLE_METRICS_CPU:BOOL=ON" \
+    "-DTRITON_ENABLE_TRACING:BOOL=ON" "-DTRITON_ENABLE_NVTX:BOOL=OFF" \
+    "-DTRITON_ENABLE_GPU:BOOL=OFF" \
+    "-DTRITON_MIN_COMPUTE_CAPABILITY=6.0" "-DTRITON_ENABLE_MALI_GPU:BOOL=ON" \
+    "-DTRITON_ENABLE_GRPC:BOOL=ON" "-DTRITON_ENABLE_HTTP:BOOL=ON" \
+    "-DTRITON_ENABLE_SAGEMAKER:BOOL=OFF" "-DTRITON_ENABLE_VERTEX_AI:BOOL=OFF" \
+    "-DTRITON_ENABLE_GCS:BOOL=OFF" "-DTRITON_ENABLE_S3:BOOL=OFF" \
+    "-DTRITON_ENABLE_AZURE_STORAGE:BOOL=OFF" "-DTRITON_ENABLE_ENSEMBLE:BOOL=ON" \
+    "-DTRITON_ENABLE_TENSORRT:BOOL=OFF" /data/github_codes/server
+#make -j16 VERBOSE=1 install
+make -j16 install
+mkdir -p /data/github_codes/server/build_test/opt/tritonserver/bin
+cp /data/github_codes/server/build_test/tritonserver/install/bin/tritonserver /data/github_codes/server/build_test/opt/tritonserver/bin
+mkdir -p /data/github_codes/server/build_test/opt/tritonserver/lib
+cp /data/github_codes/server/build_test/tritonserver/install/lib/libtritonserver.so /data/github_codes/server/build_test/opt/tritonserver/lib
+mkdir -p /data/github_codes/server/build_test/opt/tritonserver/include/triton
+cp -r /data/github_codes/server/build_test/tritonserver/install/include/triton/core /data/github_codes/server/build_test/opt/tritonserver/include/triton/core
+cp /data/github_codes/server/LICENSE /data/github_codes/server/build_test/opt/tritonserver
+cp /data/github_codes/server/TRITON_VERSION /data/github_codes/server/build_test/opt/tritonserver
+#
+# end Triton core library and tritonserver executable
+########
+
+########
+# 'rknn' backend
+# Delete this section to remove backend from build
+#
+mkdir -p /data/github_codes/server/build_test
+cd /data/github_codes/server/build_test
+#rm -fr rknn
+
+mkdir -p /data/github_codes/server/build_test/rknn/build
+cd /data/github_codes/server/build_test/rknn/build
+cmake \
+    "-DTRT_VERSION=${TRT_VERSION}" "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}" \
+    "-DVCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}" "-DTRITON_BUILD_CONTAINER_VERSION=23.05" \
+    "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX:PATH=/data/github_codes/server/build_test/rknn/install" \
+    "-DTRITON_COMMON_REPO_TAG:STRING=r23.05" "-DTRITON_CORE_REPO_TAG:STRING=r23.05" \
+    "-DTRITON_BACKEND_REPO_TAG:STRING=r23.05" "-DTRITON_ENABLE_GPU:BOOL=OFF" \
+    "-DTRITON_ENABLE_MALI_GPU:BOOL=ON" "-DTRITON_ENABLE_STATS:BOOL=ON" \
+    "-DTRITON_ENABLE_METRICS:BOOL=ON" ..
 #make -j1 VERBOSE=1 install
 make -j install
 mkdir -p /data/github_codes/server/build_test/opt/tritonserver/backends
@@ -58,12 +133,30 @@ cp -r /data/github_codes/server/build_test/rknn/install/backends/rknn /data/gith
 # end 'rknn' backend
 ########
 ```
-### 4 切换到server目录下，执行编译
+### 5 切换到server目录下，执行编译
 ```
 cd ../
 ./build_test/cmake_build
 
-# 最终会在build_test/opt/tritonserver目录下存放编译生成的所有内容
+# 初次编译耗时较长(1h+),最终会在build_test/opt/tritonserver目录下存放编译生成的所有内容
 ```
+
+## 测试
+### 1 启动triton-server服务
+```
+./build_test/opt/tritonserver/bin/tritonserver  --model-repository /data/github_codes/server/build_test/rknn/examples/models --backend-directory /data/github_codes/server/build_test/opt/tritonserver/backends/
+```
+
+### 2 yolov5模型测试
+```
+# 新开命令行
+cd /data/github_codes/server/build_test/rknn/examples
+python test_yolov5.py
+
+# 可以通过修改/data/github_codes/server/build_test/rknn/examples/models/config.pbtxt 增加模型实例个数和占用具体的npu核
+# 目前，不支持模型core_mask设置为RKNN_NPU_CORE_0_1 和 RKNN_NPU_CORE_0_1_2
+```
+
+
 
 
