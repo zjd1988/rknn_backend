@@ -133,7 +133,7 @@ cp -r /data/github_codes/server/build_test/rknn/install/backends/rknn /data/gith
 # end 'rknn' backend
 ########
 ```
-### 5 切换到server目录下，执行编译
+### 6 切换到server目录下，执行编译
 ```
 cd ../
 ./build_test/cmake_build
@@ -149,14 +149,21 @@ cd ../
 
 ### 2 yolov5模型测试
 ```
-# 新开命令行
+# 需要预先在python环境安装 tritonclient
+python -m pip install tritonclient[all]
 cd /data/github_codes/server/build_test/rknn/examples
 python test_yolov5.py
 
-# 可以通过修改/data/github_codes/server/build_test/rknn/examples/models/config.pbtxt 增加模型实例个数和占用具体的npu核
-# 目前，不支持模型core_mask设置为RKNN_NPU_CORE_0_1 和 RKNN_NPU_CORE_0_1_2
+# 可以通过修改/data/github_codes/server/build_test/rknn/examples/models/yolov5/config.pbtxt
+# 配置模型实例个数和模型加载的npu核id
+# 注：目前，暂时不支持模型core_mask按RKNN_NPU_CORE_0_1和RKNN_NPU_CORE_0_1_2进行加载
 ```
 
+### 3 single_input (mobilenet) 模型测试
+```
+cd /data/github_codes/server/build_test/rknn/examples
+python test_single_input.py
+```
 
 
 
