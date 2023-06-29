@@ -7,36 +7,36 @@ from multiprocessing import Process
 import tritonclient.http as httpclient
 import tritonclient.grpc as grpclient
 
+LABEL_PATH = './labels.txt'
 IMG_PATH = './dog_224x224.jpg'
 IMG_SIZE = 224
 
-def topk_index(num_list, topk=3):
-    max_num_index = map(num_list.index, heapq.nlargest(topk, num_list))
-    return max_num_index
-
 def mobilenet_work_func(pid):
-    # Set inputs
+    # read labels
+    labels = []
+    with open(LABEL_PATH, "r") as f:
+        labels = f.readlines()    
+    # read image
     img = cv2.imread(IMG_PATH)
     img_1 = copy.deepcopy(img)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = cv2.resize(img, (IMG_SIZE, IMG_SIZE)).reshape((1, IMG_SIZE, IMG_SIZE, 3))
 
     # http client 
-    # triton_client = httpclient.InferenceServerClient(url='10.2.83.22:8000')
+    # triton_client = httpclient.InferenceServerClient(url='127.0.0.1:8000')
     # inputs = []
-    # inputs.append(httpclient.InferInput('images', img.shape, "UINT8"))
+    # inputs.append(httpclient.InferInput('input', img.shape, "UINT8"))
     # inputs[0].set_data_from_numpy(img, binary_data=False)
 
     # outputs = []
-    # outputs.append(httpclient.InferRequestedOutput("output"))
-    # outputs.append(httpclient.InferRequestedOutput("371"))
-    # outputs.append(httpclient.InferRequestedOutput("390"))
+    # outputs.append(httpclient.InferRequestedOutput("MobilenetV1/Predictions/Reshape_1"))
 
-    triton_client = grpclient.InferenceServerClient(url='10.2.83.22:8001')
+    # set inputs
+    triton_client = grpclient.InferenceServerClient(url='127.0.0.1:8001')
     inputs = []
     inputs.append(grpclient.InferInput('input', img.shape, "UINT8"))
     inputs[0].set_data_from_numpy(img)
-
+    # set outputs
     outputs = []
     outputs.append(grpclient.InferRequestedOutput("MobilenetV1/Predictions/Reshape_1"))
 
@@ -48,9 +48,12 @@ def mobilenet_work_func(pid):
         print("{}: infer {}".format(pid, count))
         count = count + 1
 
-    result_list = results.as_numpy("MobilenetV1/Predictions/Reshape_1").reshape(1001).tolist()
-    index = topk_index(result_list, 5)
-    print(result_list[index])
+    # print infer result
+    class_result = results.as_numpy("MobilenetV1/Predictions/Reshape_1").reshape(1001)
+    top_index = heapq.nlargest(3, range(len(class_result)), class_result.__getitem__)
+    for index in top_index:
+        print("{}:{}".format(labels[index].strip("\n"), class_result[index]))
+
 
 if __name__ == '__main__':    
     process_num = 1
