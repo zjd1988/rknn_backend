@@ -3,14 +3,14 @@ backend: "rknn"
 max_batch_size : 1
 input [
   {
-    name: "input"
-    data_type: TYPE_INT8
-    dims: [ 1, 128, 128 ]
+    name: "input.1"
+    data_type: TYPE_UINT8
+    dims: [ 128, 128, 1 ]
   },
   {
-    name: "input1"
-    data_type: TYPE_INT8
-    dims: [ 3, 128, 128 ]
+    name: "input"
+    data_type: TYPE_UINT8
+    dims: [ 128, 128, 3 ]
   }
 
 ]
