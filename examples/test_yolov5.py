@@ -8,8 +8,6 @@ import tritonclient.grpc as grpclient
 
 IMG_PATH = './bus.jpg'
 
-QUANTIZE_ON = True
-
 OBJ_THRESH = 0.25
 NMS_THRESH = 0.45
 IMG_SIZE = 640
@@ -230,35 +228,42 @@ def letterbox(im, new_shape=(640, 640), color=(0, 0, 0)):
 
 
 def yolov5_work_func(pid):
-    # Set inputs
+    # read image
     img = cv2.imread(IMG_PATH)
     img, ratio, (dw, dh) = letterbox(img, new_shape=(IMG_SIZE, IMG_SIZE))
     img_1 = copy.deepcopy(img)
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = cv2.resize(img, (IMG_SIZE, IMG_SIZE)).reshape((1, IMG_SIZE, IMG_SIZE, 3))
 
-    # http client 
-    # triton_client = httpclient.InferenceServerClient(url='10.2.83.22:8000')
+    # use http client 
+    # triton_client = httpclient.InferenceServerClient(url='127.0.0.1:8000')
+
+    # 1 set inputs
     # inputs = []
     # inputs.append(httpclient.InferInput('images', img.shape, "UINT8"))
     # inputs[0].set_data_from_numpy(img, binary_data=False)
 
+    # 2 set outputs
     # outputs = []
     # outputs.append(httpclient.InferRequestedOutput("output"))
     # outputs.append(httpclient.InferRequestedOutput("371"))
     # outputs.append(httpclient.InferRequestedOutput("390"))
 
-    triton_client = grpclient.InferenceServerClient(url='10.2.83.22:8001')
+    # use grpc client
+    triton_client = grpclient.InferenceServerClient(url='127.0.0.1:8001')
+
+    # 1 set inputs
     inputs = []
     inputs.append(grpclient.InferInput('images', img.shape, "UINT8"))
     inputs[0].set_data_from_numpy(img)
 
+    # 2 set outputs
     outputs = []
     outputs.append(grpclient.InferRequestedOutput("output"))
     outputs.append(grpclient.InferRequestedOutput("371"))
     outputs.append(grpclient.InferRequestedOutput("390"))
 
-    # Inference
+    # 3 Inference
     print('--> Running model')
     count = 0
     while count < 1:
@@ -266,7 +271,7 @@ def yolov5_work_func(pid):
         print("{}: infer {}".format(pid, count))
         count = count + 1
 
-    # post process
+    # 4 post process
     input0_data = results.as_numpy("output")
     input1_data = results.as_numpy("371")
     input2_data = results.as_numpy("390")
@@ -281,11 +286,10 @@ def yolov5_work_func(pid):
     input_data.append(np.transpose(input2_data, (2, 3, 0, 1)))
 
     boxes, classes, scores = yolov5_post_process(input_data)
-
-    # img_1 = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
     if boxes is not None:
         draw(img_1, boxes, scores, classes)
 
+    # 5 save result
     cv2.imwrite("detect_result.jpg", img_1)
 
 if __name__ == '__main__':    
