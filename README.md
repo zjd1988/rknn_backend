@@ -158,12 +158,18 @@ python test_yolov5.py
 # 配置模型实例个数和模型加载的npu核id
 # 注：目前，暂时不支持模型core_mask按RKNN_NPU_CORE_0_1和RKNN_NPU_CORE_0_1_2进行加载
 ```
-
+![yolov5测试结果](https://github.com/zjd1988/rknn_backend/blob/main/examples/yolov5_result.jpg)
 ### 3 single_input (mobilenet) 模型测试
 ```
 cd /data/github_codes/server/build_test/rknn/examples
 python test_single_input.py
+
+# mobilenet test top3 result
+# Shih-Tzu:0.984375
+# Pekinese:0.0078125
+# Lhasa:0.00390625
 ```
+
 
 
 
