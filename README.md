@@ -151,7 +151,7 @@ cd ../
 ```
 # 需要预先在python环境安装 tritonclient
 python -m pip install tritonclient[all]
-cd /data/github_codes/server/build_test/rknn/examples
+cd /data/github_codes/server/build_test/rknn/examples/yolov5
 python test_yolov5.py
 
 # 可以通过修改/data/github_codes/server/build_test/rknn/examples/models/yolov5/config.pbtxt
@@ -162,7 +162,7 @@ python test_yolov5.py
 
 ### 3 single_input (mobilenet) 模型测试
 ```
-cd /data/github_codes/server/build_test/rknn/examples
+cd /data/github_codes/server/build_test/rknn/examples/single_input
 python test_single_input.py
 
 # mobilenet test top3 result
@@ -173,13 +173,9 @@ python test_single_input.py
 
 ### 4 multi_input 模型测试
 ```
-cd /data/github_codes/server/build_test/rknn/examples
+cd /data/github_codes/server/build_test/rknn/examples/multi_input
 python test_multi_input.py
 
 # multi input result shape
 # (1, 8, 128, 128)
 ```
-
-
-
-
