@@ -1,0 +1,20 @@
+name: "preprocess"
+backend: "python"
+max_batch_size: 1
+input [
+  {
+    name: "INPUT_0"
+    data_type: TYPE_UINT8
+    dims: [ -1 ]
+  }
+]
+
+output [
+  {
+    name: "OUTPUT_0"
+    data_type: TYPE_UINT8
+    dims: [ 224, 224, 3 ]
+  }
+]
+
+instance_group [{ kind: KIND_CPU }]
