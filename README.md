@@ -15,7 +15,7 @@ git clone https://github.com/triton-inference-server/server.git
 
 cd /data/github_codes/server
 python ./build.py -v --dryrun --no-container-build --backend=ensemble \
---endpoint=grpc --endpoint=http --enable-logging \
+--backend=python --endpoint=grpc --endpoint=http --enable-logging \
 --enable-stats --enable-metrics --enable-cpu-metrics --enable-tracing \
 --enable-mali-gpu --build-dir=/data/github_codes/server/build_test
 ```
@@ -104,6 +104,27 @@ cp /data/github_codes/server/LICENSE /data/github_codes/server/build_test/opt/tr
 cp /data/github_codes/server/TRITON_VERSION /data/github_codes/server/build_test/opt/tritonserver
 #
 # end Triton core library and tritonserver executable
+########
+
+########
+# 'python' backend
+# Delete this section to remove backend from build
+#
+mkdir -p /data/github_codes/server/build_test
+cd /data/github_codes/server/build_test
+rm -fr python
+if [[ ! -e python ]]; then
+  git clone --recursive --single-branch --depth=1 -b r23.05 https://github.com/triton-inference-server/python_backend.git python;
+fi
+mkdir -p /data/github_codes/server/build_test/python/build
+cd /data/github_codes/server/build_test/python/build
+cmake "-DTRT_VERSION=${TRT_VERSION}" "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}" "-DVCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX:PATH=/data/github_codes/server/build_test/python/install" "-DTRITON_COMMON_REPO_TAG:STRING=r23.05" "-DTRITON_CORE_REPO_TAG:STRING=r23.05" "-DTRITON_BACKEND_REPO_TAG:STRING=r23.05" "-DTRITON_ENABLE_GPU:BOOL=OFF" "-DTRITON_ENABLE_MALI_GPU:BOOL=ON" "-DTRITON_ENABLE_STATS:BOOL=ON" "-DTRITON_ENABLE_METRICS:BOOL=ON" ..
+make -j16 VERBOSE=1 install
+mkdir -p /data/github_codes/server/build_test/opt/tritonserver/backends
+rm -fr /data/github_codes/server/build_test/opt/tritonserver/backends/python
+cp -r /data/github_codes/server/build_test/python/install/backends/python /data/github_codes/server/build_test/opt/tritonserver/backends
+#
+# end 'python' backend
 ########
 
 ########
