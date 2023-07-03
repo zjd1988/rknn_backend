@@ -100,9 +100,7 @@ class TritonPythonModel:
 
             img = in_0.as_numpy()
             image = cv2.imdecode(img, cv2.IMREAD_COLOR)
-            print(image.shape)
             image = cv2.resize(image, (224, 224))
-            print(image.shape)
             img_out = np.expand_dims(image, 0)
             img_out = np.array(img_out)
 
