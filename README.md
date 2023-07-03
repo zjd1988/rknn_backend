@@ -179,3 +179,11 @@ python test_multi_input.py
 # multi input result shape
 # (1, 8, 128, 128)
 ```
+
+### 5 ensemble_mobilenet 模型测试(ensemble+python)
+```
+cd /data/github_codes/server/build_test/rknn/examples/ensemble_mobilenet
+python test_ensemble_mobilenet.py --image ../single_input/dog_224x224.jpg --label_file ../single_input/labels.txt
+
+# Result is class: Shih-Tzu
+```
