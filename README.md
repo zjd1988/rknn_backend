@@ -1,5 +1,5 @@
 # rknn_backend
-## 编译步骤
+## 一 编译步骤
 ### 1 本地源码编译 
 ```
 参考 doc/local_build_from_source.md 文件
@@ -10,7 +10,8 @@
 参考 doc/local_build_from_docker.md 文件
 ```
 
-## 本地测试(适用于源码编译方式，docker编译方式需先挂载代码目录进镜像后再操作)
+## 二 测试
+注：适用于源码编译方式，docker编译方式需先挂载代码目录进镜像后再操作
 ### 1 启动triton-server服务
 ```
 ./build_test/opt/tritonserver/bin/tritonserver  --model-repository /data/github_codes/server/build_test/rknn/examples/models --backend-directory /data/github_codes/server/build_test/opt/tritonserver/backends/
