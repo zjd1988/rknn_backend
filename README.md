@@ -2,14 +2,11 @@
 ## 一 编译步骤
 ### 1 本地源码编译 
 当前使用rknn-toolkit2-1.4.0
-```
 参考 [本地源码编译](https://github.com/zjd1988/rknn_backend/tree/main/doc/local_build_from_source.md) 文件
-```
 
 ### 2 本地docker编译
-```
 参考 [本地Docker编译](https://github.com/zjd1988/rknn_backend/tree/main/doc/local_build_from_docker.md) 文件
-```
+
 
 ## 二 测试
 注：适用于源码编译方式，docker编译方式需先挂载代码目录进镜像后再操作
