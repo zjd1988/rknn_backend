@@ -130,20 +130,6 @@ install(FILES ${RK_LIB_PATHS}
   DESTINATION ${CMAKE_INSTALL_PREFIX}/backends/rknn
 )
 
-FOREACH(rklib ${PT_LIBS})
-  install(
-    CODE
-      "EXECUTE_PROCESS(
-        COMMAND patchelf --set-rpath \$ORIGIN ${rklib}
-        RESULT_VARIABLE PATCHELF_STATUS
-        WORKING_DIRECTORY ${CMAKE_INSTALL_PREFIX}/backends/rknn)
-      if(PATCHELF_STATUS AND NOT PATCHELF_STATUS EQUAL 0)
-        message(FATAL_ERROR \"FAILED: to run patchelf\")
-      endif()"
-  )
-ENDFOREACH(rklib)
-
-
 install(
   EXPORT
     triton-rknn-backend-targets
