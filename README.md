@@ -1,6 +1,6 @@
 # rknn_backend
 ## 一 编译步骤
-当前使用rknn-toolkit2-1.4.0  
+ 
 ### 1 本地源码编译 
 参考 [本地源码编译](https://github.com/zjd1988/rknn_backend/tree/main/doc/local_build_from_source.md) 文件
 
