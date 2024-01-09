@@ -5,7 +5,8 @@
 
 cd /data/github_codes
 git clone https://github.com/triton-inference-server/server.git
-cd /data/github_codes/server/ && git checkout r23.12
+cd /data/github_codes/server/
+cd server && git checkout r23.12
 ```
 
 ### 2 切换到server目录，执行python ./build.py 生成cmake_build编译脚本
@@ -17,7 +18,7 @@ cd /data/github_codes/server
 python ./build.py -v --dryrun --no-container-build --backend=ensemble \
 --backend=python --backend=onnxruntime --endpoint=grpc --endpoint=http --enable-logging \
 --enable-stats --enable-metrics --enable-cpu-metrics --enable-tracing \
---enable-mali-gpu --build-dir=/data/github_codes/server/build
+--enable-mali-gpu --build-dir=$PWD/build
 ```
 
 ### 3 拉取rknn_backend仓库到build路径下
