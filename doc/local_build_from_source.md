@@ -238,6 +238,7 @@ cd ../
 
 ### 7 python 后端编译问题
 ```
+需要修改CMakeLists.txt
 boost下载失败, 将
 https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.gz
 替换为
@@ -250,7 +251,6 @@ https://jaist.dl.sourceforge.net/project/boost/boost/1.79.0/boost_1_79_0.tar.gz
 /////////////////////////////////////////////////////////
 ///////////////////CMakeLists.txt////////////////////////
 /////////////////////////////////////////////////////////
-
 onnxruntime后端代码CMakeLists.txt中将gpu开关关闭，dockers镜像地址替换为arm64架构的22.04镜像地址
 将
 option(TRITON_ENABLE_GPU "Enable GPU support in backend" ON)
@@ -261,7 +261,16 @@ set(TRITON_BUILD_CONTAINER "nvcr.io/nvidia/tritonserver:${TRITON_BUILD_CONTAINER
 替换为
 set(TRITON_BUILD_CONTAINER "webhippie/ubuntu:22.04-arm64")
 
-完整CMakeLists.txt如下：
+/////////////////////////////////////////////////////////
+/////////////////tools/gen_ort_dockerfile.py/////////////
+/////////////////////////////////////////////////////////
+onnxruntime后端代码tools/gen_ort_dockerfile.py
+替换为下面，主要是替换了源
+RUN sed -i s@/deb.debian.org/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+```
+
+## 9 onnxruntime CMakeLists.txt 完整代码(option)
+```
 # Copyright (c) 2020-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -746,14 +755,11 @@ export(
 )
 
 export(PACKAGE TritonOnnxRuntimeBackend)
+```
 
-/////////////////////////////////////////////////////////
-/////////////////tools/gen_ort_dockerfile.py/////////////
-/////////////////////////////////////////////////////////
-
-
-onnxruntime后端代码tools/gen_ort_dockerfile.py
-替换为下面，主要是替换了源
+## 10 onnxruntim tools/gen_ort_dockerfile.py 完整代码(option)
+```
+完整代码如下
 #!/usr/bin/env python3
 # Copyright 2020-2023, NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 #
