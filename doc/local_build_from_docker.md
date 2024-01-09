@@ -5,6 +5,7 @@
 
 cd /data/github_codes
 git clone https://github.com/triton-inference-server/server.git
+cd server && git checkout r23.12
 ```
 
 ## 2 切换到server目录，执行python ./build.py 生成docker_build等编译脚本
@@ -16,7 +17,7 @@ cd /data/github_codes/server
 python ./build.py -v --dryrun --backend=ensemble \
 --backend=python --backend=onnxruntime --endpoint=grpc --endpoint=http --enable-logging \
 --enable-stats --enable-metrics --enable-cpu-metrics --enable-tracing \
---enable-mali-gpu --build-dir=/data/github_codes/server/build
+--enable-mali-gpu --build-dir=$PWD/build
 ```
 
 ## 3 修改cmake_build，添加rknn_backend相关脚本命令
