@@ -29,32 +29,32 @@ git clone https://github.com/zjd1988/rknn_backend.git rknn
 
 ### 4 修改cmake_build，添加rknn_backend相关脚本命令
 ```
-# 执行完成第一步会在/data/github_codes/server/build_test目录下生成cmake_build
+# 执行完成第一步会在/data/github_codes/server/build目录下生成cmake_build
 # 在该文件最后添加下面的rknn_backend相关编译脚本命令
 
 ########
 # 'rknn' backend
 # Delete this section to remove backend from build
 #
-mkdir -p /data/github_codes/server/build_test
-cd /data/github_codes/server/build_test
+mkdir -p /data/github_codes/server/build
+cd /data/github_codes/server/build
 #rm -fr rknn
 
-mkdir -p /data/github_codes/server/build_test/rknn/build
-cd /data/github_codes/server/build_test/rknn/build
+mkdir -p /data/github_codes/server/build/rknn/build
+cd /data/github_codes/server/build/rknn/build
 cmake \
     "-DTRT_VERSION=${TRT_VERSION}" "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}" \
     "-DVCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}" "-DTRITON_BUILD_CONTAINER_VERSION=23.12" \
-    "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX:PATH=/data/github_codes/server/build_test/rknn/install" \
+    "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX:PATH=/data/github_codes/server/build/rknn/install" \
     "-DTRITON_COMMON_REPO_TAG:STRING=r23.12" "-DTRITON_CORE_REPO_TAG:STRING=r23.12" \
     "-DTRITON_BACKEND_REPO_TAG:STRING=r23.12" "-DTRITON_ENABLE_GPU:BOOL=OFF" \
     "-DTRITON_ENABLE_MALI_GPU:BOOL=ON" "-DTRITON_ENABLE_STATS:BOOL=ON" \
     "-DTRITON_ENABLE_METRICS:BOOL=ON" ..
 #make -j16 VERBOSE=1 install
 make -j install
-mkdir -p /data/github_codes/server/build_test/opt/tritonserver/backends
-rm -fr /data/github_codes/server/build_test/opt/tritonserver/backends/rknn
-cp -r /data/github_codes/server/build_test/rknn/install/backends/rknn /data/github_codes/server/build_test/opt/tritonserver/backends
+mkdir -p /data/github_codes/server/build/opt/tritonserver/backends
+rm -fr /data/github_codes/server/build/opt/tritonserver/backends/rknn
+cp -r /data/github_codes/server/build/rknn/install/backends/rknn /data/github_codes/server/build/opt/tritonserver/backends
 #
 # end 'rknn' backend
 ########
@@ -74,47 +74,41 @@ set -x
 ########
 # Triton core library and tritonserver executable
 #
-mkdir -p /tmp/tritonbuild/tritonserver/build
-cd /tmp/tritonbuild/tritonserver/build
-cmake "-DTRT_VERSION=${TRT_VERSION}" "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}" "-DVCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX:PATH=/tmp/tritonbuild/tritonserver/install" "-DTRITON_VERSION:STRING=2.41.0" "-DTRITON_COMMON_REPO_TAG:STRING=r23.12" "-DTRITON_CORE_REPO_TAG:STRING=r23.12" "-DTRITON_BACKEND_REPO_TAG:STRING=r23.12" "-DTRITON_THIRD_PARTY_REPO_TAG:STRING=r23.12" "-DTRITON_ENABLE_LOGGING:BOOL=ON" "-DTRITON_ENABLE_STATS:BOOL=ON" "-DTRITON_ENABLE_METRICS:BOOL=ON" "-DTRITON_ENABLE_METRICS_GPU:BOOL=OFF" "-DTRITON_ENABLE_METRICS_CPU:BOOL=ON" "-DTRITON_ENABLE_TRACING:BOOL=ON" "-DTRITON_ENABLE_NVTX:BOOL=OFF" "-DTRITON_ENABLE_GPU:BOOL=OFF" "-DTRITON_MIN_COMPUTE_CAPABILITY=6.0" "-DTRITON_ENABLE_MALI_GPU:BOOL=ON" "-DTRITON_ENABLE_GRPC:BOOL=ON" "-DTRITON_ENABLE_HTTP:BOOL=ON" "-DTRITON_ENABLE_SAGEMAKER:BOOL=OFF" "-DTRITON_ENABLE_VERTEX_AI:BOOL=OFF" "-DTRITON_ENABLE_GCS:BOOL=OFF" "-DTRITON_ENABLE_S3:BOOL=OFF" "-DTRITON_ENABLE_AZURE_STORAGE:BOOL=OFF" "-DTRITON_ENABLE_ENSEMBLE:BOOL=ON" "-DTRITON_ENABLE_TENSORRT:BOOL=OFF" /workspace
+mkdir -p /data/github_codes/server/build/tritonserver/build
+cd /data/github_codes/server/build/tritonserver/build
+cmake "-DTRT_VERSION=${TRT_VERSION}" "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}" "-DVCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX:PATH=/data/github_codes/server/build/tritonserver/install" "-DTRITON_VERSION:STRING=2.41.0" "-DTRITON_COMMON_REPO_TAG:STRING=r23.12" "-DTRITON_CORE_REPO_TAG:STRING=r23.12" "-DTRITON_BACKEND_REPO_TAG:STRING=r23.12" "-DTRITON_THIRD_PARTY_REPO_TAG:STRING=r23.12" "-DTRITON_ENABLE_LOGGING:BOOL=ON" "-DTRITON_ENABLE_STATS:BOOL=ON" "-DTRITON_ENABLE_METRICS:BOOL=ON" "-DTRITON_ENABLE_METRICS_GPU:BOOL=OFF" "-DTRITON_ENABLE_METRICS_CPU:BOOL=ON" "-DTRITON_ENABLE_TRACING:BOOL=ON" "-DTRITON_ENABLE_NVTX:BOOL=OFF" "-DTRITON_ENABLE_GPU:BOOL=OFF" "-DTRITON_MIN_COMPUTE_CAPABILITY=6.0" "-DTRITON_ENABLE_MALI_GPU:BOOL=ON" "-DTRITON_ENABLE_GRPC:BOOL=ON" "-DTRITON_ENABLE_HTTP:BOOL=ON" "-DTRITON_ENABLE_SAGEMAKER:BOOL=OFF" "-DTRITON_ENABLE_VERTEX_AI:BOOL=OFF" "-DTRITON_ENABLE_GCS:BOOL=OFF" "-DTRITON_ENABLE_S3:BOOL=OFF" "-DTRITON_ENABLE_AZURE_STORAGE:BOOL=OFF" "-DTRITON_ENABLE_ENSEMBLE:BOOL=ON" "-DTRITON_ENABLE_TENSORRT:BOOL=OFF" /data/github_codes/server
 make -j16 VERBOSE=1 install
-mkdir -p /tmp/tritonbuild/install/bin
-cp /tmp/tritonbuild/tritonserver/install/bin/tritonserver /tmp/tritonbuild/install/bin
-mkdir -p /tmp/tritonbuild/install/lib
-cp /tmp/tritonbuild/tritonserver/install/lib/libtritonserver.so /tmp/tritonbuild/install/lib
-mkdir -p /tmp/tritonbuild/install/python
-cp /tmp/tritonbuild/tritonserver/install/python/tritonserver*.whl /tmp/tritonbuild/install/python
-mkdir -p /tmp/tritonbuild/install/include/triton
-cp -r /tmp/tritonbuild/tritonserver/install/include/triton/core /tmp/tritonbuild/install/include/triton/core
-cp /workspace/LICENSE /tmp/tritonbuild/install
-cp /workspace/TRITON_VERSION /tmp/tritonbuild/install
-mkdir -p /tmp/tritonbuild/install/third-party-src
-cd /tmp/tritonbuild/tritonserver/build
-tar zcf /tmp/tritonbuild/install/third-party-src/src.tar.gz third-party-src
-cp /workspace/docker/README.third-party-src /tmp/tritonbuild/install/third-party-src/README
+mkdir -p /data/github_codes/server/build/opt/tritonserver/bin
+cp /data/github_codes/server/build/tritonserver/install/bin/tritonserver /data/github_codes/server/build/opt/tritonserver/bin
+mkdir -p /data/github_codes/server/build/opt/tritonserver/lib
+cp /data/github_codes/server/build/tritonserver/install/lib/libtritonserver.so /data/github_codes/server/build/opt/tritonserver/lib
+mkdir -p /data/github_codes/server/build/opt/tritonserver/python
+cp /data/github_codes/server/build/tritonserver/install/python/tritonserver*.whl /data/github_codes/server/build/opt/tritonserver/python
+mkdir -p /data/github_codes/server/build/opt/tritonserver/include/triton
+cp -r /data/github_codes/server/build/tritonserver/install/include/triton/core /data/github_codes/server/build/opt/tritonserver/include/triton/core
+cp /data/github_codes/server/LICENSE /data/github_codes/server/build/opt/tritonserver
+cp /data/github_codes/server/TRITON_VERSION /data/github_codes/server/build/opt/tritonserver
 #
 # end Triton core library and tritonserver executable
 ########
-
-exit 0
 
 ########
 # 'python' backend
 # Delete this section to remove backend from build
 #
-mkdir -p /tmp/tritonbuild
-cd /tmp/tritonbuild
+mkdir -p /data/github_codes/server/build
+cd /data/github_codes/server/build
 rm -fr python
 if [[ ! -e python ]]; then
   git clone --recursive --single-branch --depth=1 -b r23.12 https://github.com/triton-inference-server/python_backend.git python;
 fi
-mkdir -p /tmp/tritonbuild/python/build
-cd /tmp/tritonbuild/python/build
-cmake "-DTRT_VERSION=${TRT_VERSION}" "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}" "-DVCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX:PATH=/tmp/tritonbuild/python/install" "-DTRITON_COMMON_REPO_TAG:STRING=r23.12" "-DTRITON_CORE_REPO_TAG:STRING=r23.12" "-DTRITON_BACKEND_REPO_TAG:STRING=r23.12" "-DTRITON_ENABLE_GPU:BOOL=OFF" "-DTRITON_ENABLE_MALI_GPU:BOOL=ON" "-DTRITON_ENABLE_STATS:BOOL=ON" "-DTRITON_ENABLE_METRICS:BOOL=ON" ..
+mkdir -p /data/github_codes/server/build/python/build
+cd /data/github_codes/server/build/python/build
+cmake "-DTRT_VERSION=${TRT_VERSION}" "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}" "-DVCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX:PATH=/data/github_codes/server/build/python/install" "-DTRITON_COMMON_REPO_TAG:STRING=r23.12" "-DTRITON_CORE_REPO_TAG:STRING=r23.12" "-DTRITON_BACKEND_REPO_TAG:STRING=r23.12" "-DTRITON_ENABLE_GPU:BOOL=OFF" "-DTRITON_ENABLE_MALI_GPU:BOOL=ON" "-DTRITON_ENABLE_STATS:BOOL=ON" "-DTRITON_ENABLE_METRICS:BOOL=ON" ..
 make -j16 VERBOSE=1 install
-mkdir -p /tmp/tritonbuild/install/backends
-rm -fr /tmp/tritonbuild/install/backends/python
-cp -r /tmp/tritonbuild/python/install/backends/python /tmp/tritonbuild/install/backends
+mkdir -p /data/github_codes/server/build/opt/tritonserver/backends
+rm -fr /data/github_codes/server/build/opt/tritonserver/backends/python
+cp -r /data/github_codes/server/build/python/install/backends/python /data/github_codes/server/build/opt/tritonserver/backends
 #
 # end 'python' backend
 ########
@@ -123,117 +117,54 @@ cp -r /tmp/tritonbuild/python/install/backends/python /tmp/tritonbuild/install/b
 # 'onnxruntime' backend
 # Delete this section to remove backend from build
 #
-mkdir -p /tmp/tritonbuild
-cd /tmp/tritonbuild
+mkdir -p /data/github_codes/server/build
+cd /data/github_codes/server/build
 rm -fr onnxruntime
 if [[ ! -e onnxruntime ]]; then
   git clone --recursive --single-branch --depth=1 -b r23.12 https://github.com/triton-inference-server/onnxruntime_backend.git onnxruntime;
 fi
-mkdir -p /tmp/tritonbuild/onnxruntime/build
-cd /tmp/tritonbuild/onnxruntime/build
-cmake "-DTRT_VERSION=${TRT_VERSION}" "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}" "-DVCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}" "-DTRITON_BUILD_ONNXRUNTIME_VERSION=1.16.3" "-DTRITON_BUILD_CONTAINER_VERSION=23.12" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX:PATH=/tmp/tritonbuild/onnxruntime/install" "-DTRITON_COMMON_REPO_TAG:STRING=r23.12" "-DTRITON_CORE_REPO_TAG:STRING=r23.12" "-DTRITON_BACKEND_REPO_TAG:STRING=r23.12" "-DTRITON_ENABLE_GPU:BOOL=OFF" "-DTRITON_ENABLE_MALI_GPU:BOOL=ON" "-DTRITON_ENABLE_STATS:BOOL=ON" "-DTRITON_ENABLE_METRICS:BOOL=ON" ..
+mkdir -p /data/github_codes/server/build/onnxruntime/build
+cd /data/github_codes/server/build/onnxruntime/build
+cmake "-DTRT_VERSION=${TRT_VERSION}" "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}" "-DVCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}" "-DTRITON_BUILD_ONNXRUNTIME_VERSION=1.16.3" "-DTRITON_BUILD_CONTAINER_VERSION=23.12" "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX:PATH=/data/github_codes/server/build/onnxruntime/install" "-DTRITON_COMMON_REPO_TAG:STRING=r23.12" "-DTRITON_CORE_REPO_TAG:STRING=r23.12" "-DTRITON_BACKEND_REPO_TAG:STRING=r23.12" "-DTRITON_ENABLE_GPU:BOOL=OFF" "-DTRITON_ENABLE_MALI_GPU:BOOL=ON" "-DTRITON_ENABLE_STATS:BOOL=ON" "-DTRITON_ENABLE_METRICS:BOOL=ON" ..
 make -j16 VERBOSE=1 install
-mkdir -p /tmp/tritonbuild/install/backends
-rm -fr /tmp/tritonbuild/install/backends/onnxruntime
-cp -r /tmp/tritonbuild/onnxruntime/install/backends/onnxruntime /tmp/tritonbuild/install/backends
+mkdir -p /data/github_codes/server/build/opt/tritonserver/backends
+rm -fr /data/github_codes/server/build/opt/tritonserver/backends/onnxruntime
+cp -r /data/github_codes/server/build/onnxruntime/install/backends/onnxruntime /data/github_codes/server/build/opt/tritonserver/backends
 #
 # end 'onnxruntime' backend
 ########
 
 ########
-# 'rknn' backend Delete this section to remove backend from build
+# 'rknn' backend
+# Delete this section to remove backend from build
 #
-mkdir -p /tmp/tritonbuild
-cd /tmp/tritonbuild
-rm -fr rknn
-if [[ ! -e rknn ]]; then
-  git clone https://github.com/zjd1988/rknn_backend.git rknn;
-fi
-mkdir -p /tmp/tritonbuild/rknn/build
-cd /tmp/tritonbuild/rknn/build
+mkdir -p /data/github_codes/server/build
+cd /data/github_codes/server/build
+#rm -fr rknn
+
+mkdir -p /data/github_codes/server/build/rknn/build
+cd /data/github_codes/server/build/rknn/build
 cmake \
     "-DTRT_VERSION=${TRT_VERSION}" "-DCMAKE_TOOLCHAIN_FILE=${CMAKE_TOOLCHAIN_FILE}" \
     "-DVCPKG_TARGET_TRIPLET=${VCPKG_TARGET_TRIPLET}" "-DTRITON_BUILD_CONTAINER_VERSION=23.12" \
-    "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX:PATH=/tmp/tritonbuild/rknn/install" \
+    "-DCMAKE_BUILD_TYPE=Release" "-DCMAKE_INSTALL_PREFIX:PATH=/data/github_codes/server/build/rknn/install" \
     "-DTRITON_COMMON_REPO_TAG:STRING=r23.12" "-DTRITON_CORE_REPO_TAG:STRING=r23.12" \
     "-DTRITON_BACKEND_REPO_TAG:STRING=r23.12" "-DTRITON_ENABLE_GPU:BOOL=OFF" \
     "-DTRITON_ENABLE_MALI_GPU:BOOL=ON" "-DTRITON_ENABLE_STATS:BOOL=ON" \
     "-DTRITON_ENABLE_METRICS:BOOL=ON" ..
-#make -j1 VERBOSE=1 install
+#make -j16 VERBOSE=1 install
 make -j install
-mkdir -p /tmp/tritonbuild/install/backends
-rm -fr /tmp/tritonbuild/install/backends/rknn
-cp -r /tmp/tritonbuild/rknn/install/backends/rknn /tmp/tritonbuild/install/backends
+mkdir -p /data/github_codes/server/build/opt/tritonserver/backends
+rm -fr /data/github_codes/server/build/opt/tritonserver/backends/rknn
+cp -r /data/github_codes/server/build/rknn/install/backends/rknn /data/github_codes/server/build/opt/tritonserver/backends
 #
 # end 'rknn' backend
 ########
-
-########
-# Collect Triton CI artifacts
-#
-mkdir -p /tmp/tritonbuild/ci
-cp -r /workspace/qa /tmp/tritonbuild/ci
-cp -r /workspace/deploy /tmp/tritonbuild/ci
-mkdir -p /tmp/tritonbuild/ci/docs
-cp -r /workspace/docs/examples /tmp/tritonbuild/ci/docs
-mkdir -p /tmp/tritonbuild/ci/src/test
-cp -r /workspace/src/test/models /tmp/tritonbuild/ci/src/test
-cp -r /tmp/tritonbuild/tritonserver/install/bin /tmp/tritonbuild/ci
-mkdir -p /tmp/tritonbuild/ci/lib
-cp /tmp/tritonbuild/tritonserver/install/lib/libtritonrepoagent_relocation.so /tmp/tritonbuild/ci/lib
-cp -r /tmp/tritonbuild/tritonserver/install/python /tmp/tritonbuild/ci
-mkdir -p /tmp/tritonbuild/ci/backends
-if [[ -e /tmp/tritonbuild/identity/install/backends/identity ]]; then
-cp -r /tmp/tritonbuild/identity/install/backends/identity /tmp/tritonbuild/ci/backends
-fi
-if [[ -e /tmp/tritonbuild/repeat/install/backends/repeat ]]; then
-cp -r /tmp/tritonbuild/repeat/install/backends/repeat /tmp/tritonbuild/ci/backends
-fi
-if [[ -e /tmp/tritonbuild/square/install/backends/square ]]; then
-cp -r /tmp/tritonbuild/square/install/backends/square /tmp/tritonbuild/ci/backends
-fi
-mkdir -p /tmp/tritonbuild/ci/tritonbuild/tritonserver/backends
-if [[ -e /tmp/tritonbuild/tritonserver/install/backends/query ]]; then
-cp -r /tmp/tritonbuild/tritonserver/install/backends/query /tmp/tritonbuild/ci/tritonbuild/tritonserver/backends
-fi
-if [[ -e /tmp/tritonbuild/tritonserver/install/backends/implicit_state ]]; then
-cp -r /tmp/tritonbuild/tritonserver/install/backends/implicit_state /tmp/tritonbuild/ci/tritonbuild/tritonserver/backends
-fi
-if [[ -e /tmp/tritonbuild/tritonserver/install/backends/sequence ]]; then
-cp -r /tmp/tritonbuild/tritonserver/install/backends/sequence /tmp/tritonbuild/ci/tritonbuild/tritonserver/backends
-fi
-if [[ -e /tmp/tritonbuild/tritonserver/install/backends/dyna_sequence ]]; then
-cp -r /tmp/tritonbuild/tritonserver/install/backends/dyna_sequence /tmp/tritonbuild/ci/tritonbuild/tritonserver/backends
-fi
-if [[ -e /tmp/tritonbuild/tritonserver/install/backends/distributed_addsub ]]; then
-cp -r /tmp/tritonbuild/tritonserver/install/backends/distributed_addsub /tmp/tritonbuild/ci/tritonbuild/tritonserver/backends
-fi
-if [[ -e /tmp/tritonbuild/tritonserver/install/backends/iterative_sequence ]]; then
-cp -r /tmp/tritonbuild/tritonserver/install/backends/iterative_sequence /tmp/tritonbuild/ci/tritonbuild/tritonserver/backends
-fi
-mkdir -p /tmp/tritonbuild/ci/qa/L0_custom_ops
-cp /tmp/tritonbuild/onnxruntime/install/test/libcustom_op_library.so /tmp/tritonbuild/ci/qa/L0_custom_ops
-cp /tmp/tritonbuild/onnxruntime/install/test/custom_op_test.onnx /tmp/tritonbuild/ci/qa/L0_custom_ops
-cp -r /tmp/tritonbuild/onnxruntime/test/* /tmp/tritonbuild/ci/qa
-mkdir -p /tmp/tritonbuild/ci/tritonbuild
-rm -fr /tmp/tritonbuild/python/build
-rm -fr /tmp/tritonbuild/python/install
-cp -r /tmp/tritonbuild/python /tmp/tritonbuild/ci/tritonbuild
-
-rm -fr /tmp/tritonbuild/rknn/build
-rm -fr /tmp/tritonbuild/rknn/install
-cp -r /tmp/tritonbuild/rknn /tmp/tritonbuild/ci/tritonbuild
-#
-# end Triton CI artifacts
-########
-
-chmod -R a+rw /tmp/tritonbuild/install
-chmod -R a+rw /tmp/tritonbuild/ci
 ```
 ### 6 切换到server目录下，执行编译
 ```
 cd ../
-./build_test/cmake_build
+./build/cmake_build
 
 ```
 
