@@ -1436,11 +1436,11 @@ if __name__ == "__main__":
 ```
 cd /data/github_codes
 git clone https://github.com/rockchip-linux/rknpu2.git
+cd ./rknpu2/examples/rknn_yolov5_demo
+./build-linux_RK3588.sh
 docker run --privileged -v /dev/:/dev -v /data/github_codes/rknpu2:/workspace --network host -it tritonserver:latest
 
 进入docker内, 执行如下命令
-cd /workspace/examples/rknn_yolov5_demo
-./build-linux_RK3588.sh
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/workspace/examples/rknn_yolov5_demo/install/rknn_yolov5_demo_Linux/lib/
 ./install/rknn_yolov5_demo_Linux/rknn_yolov5_demo model/RK3588/yolov5s-640-640.rknn model/bus.jpg
 
@@ -1457,13 +1457,13 @@ model input num: 1, output num: 3
   index=2, name=390, n_dims=5, dims=[1, 3, 85, 20], n_elems=102000, size=102000, fmt=UNDEFINED, type=INT8, qnt_type=AFFINE, zp=69, scale=0.081305
 model is NHWC input fmt
 model input height=640, width=640, channel=3
-once run use 49.000000 ms
+once run use 56.123000 ms
 loadLabelName ./model/coco_80_labels_list.txt
 person @ (114 235 212 527) 0.819099
 person @ (210 242 284 509) 0.814970
 person @ (479 235 561 520) 0.790311
 bus @ (99 141 557 445) 0.693320
 person @ (78 338 122 520) 0.404960
-loop count = 10 , average run  41.760800 ms
+loop count = 10 , average run  38.620200 ms
 
 ```
