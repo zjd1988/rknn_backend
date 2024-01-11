@@ -17,7 +17,7 @@ cd /data/github_codes/server
 python ./build.py -v --dryrun --backend=ensemble \
 --backend=python --backend=onnxruntime --endpoint=grpc --endpoint=http --enable-logging \
 --enable-stats --enable-metrics --enable-cpu-metrics --enable-tracing \
---enable-mali-gpu --build-dir=$PWD/build
+--enable-mali-gpu
 ```
 
 ## 3 修改cmake_build，添加rknn_backend相关脚本命令
