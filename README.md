@@ -1,7 +1,25 @@
 # rknn_backend
+## 零 环境依赖
+### 1 安装miniconda
+```
+mkdir -p ~/miniconda3
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh -O ~/miniconda3/miniconda.sh
+bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
+rm -rf ~/miniconda3/miniconda.sh
+```
+
+### 2 创建虚拟环境并安装python包
+```
+conda create -n triton_rknn python=3.10
+python -m pip install tritonclient[all]
+python -m pip install numpy opencv-python-headless
+```
+
 ## 一 编译步骤
  
-### 1 本地源码编译 
+### 1 本地源码编译
+在编译前需要激活conda虚拟环境
+conda activate triton_rknn
 参考 [本地源码编译](https://github.com/zjd1988/rknn_backend/tree/main/doc/local_build_from_source.md) 文件
 
 ### 2 本地docker编译
@@ -12,6 +30,7 @@
 注：适用于源码编译方式，docker编译方式需先挂载代码目录进镜像后再操作
 ### 1 启动triton-server服务
 ```
+conda activate triton_rknn
 ./build/opt/tritonserver/bin/tritonserver  --model-repository /data/github_codes/server/build/rknn/examples/models --backend-directory /data/github_codes/server/build/opt/tritonserver/backends/
 ```
 
