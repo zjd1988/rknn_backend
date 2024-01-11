@@ -164,7 +164,16 @@ set(TRITON_BUILD_CONTAINER "webhippie/ubuntu:22.04-arm64")
 /////////////////tools/gen_ort_dockerfile.py/////////////
 /////////////////////////////////////////////////////////
 onnxruntime后端代码tools/gen_ort_dockerfile.py
-替换为下面，主要是替换了源
-RUN sed -i s@/deb.debian.org/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+替换软件源，增加下面的代码
+# The Onnx Runtime dockerfile is the collection of steps in
+# https://github.com/microsoft/onnxruntime/tree/master/dockerfiles
+RUN sed -i s@/deb.debian.org/@/mirrors.aliyun.com/@g /etc/apt/sources.list    // 增加
+
+
+增加编译开关，在下面代码处增加
+    if os.name == "posix":
+        if os.getuid() == 0:
+            ep_flags += " --allow_running_as_root"
+    ep_flags += "--allow_running_as_root"   // 增加
 ```
 
