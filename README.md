@@ -12,17 +12,17 @@
 注：适用于源码编译方式，docker编译方式需先挂载代码目录进镜像后再操作
 ### 1 启动triton-server服务
 ```
-./build_test/opt/tritonserver/bin/tritonserver  --model-repository /data/github_codes/server/build_test/rknn/examples/models --backend-directory /data/github_codes/server/build_test/opt/tritonserver/backends/
+./build/opt/tritonserver/bin/tritonserver  --model-repository /data/github_codes/server/build/rknn/examples/models --backend-directory /data/github_codes/server/build/opt/tritonserver/backends/
 ```
 
 ### 2 yolov5模型测试
 ```
 # 需要预先在python环境安装 tritonclient
 python -m pip install tritonclient[all]
-cd /data/github_codes/server/build_test/rknn/examples/yolov5
+cd /data/github_codes/server/build/rknn/examples/yolov5
 python test_yolov5.py
 
-# 可以通过修改/data/github_codes/server/build_test/rknn/examples/models/yolov5/config.pbtxt
+# 可以通过修改/data/github_codes/server/build/rknn/examples/models/yolov5/config.pbtxt
 # 配置模型实例个数和模型加载的npu核id
 # 注：目前，暂时不支持模型core_mask按RKNN_NPU_CORE_0_1和RKNN_NPU_CORE_0_1_2进行加载
 ```
@@ -30,7 +30,7 @@ python test_yolov5.py
 
 ### 3 single_input (mobilenet) 模型测试
 ```
-cd /data/github_codes/server/build_test/rknn/examples/single_input
+cd /data/github_codes/server/build/rknn/examples/single_input
 python test_single_input.py
 
 # mobilenet test top3 result
@@ -41,7 +41,7 @@ python test_single_input.py
 
 ### 4 multi_input 模型测试
 ```
-cd /data/github_codes/server/build_test/rknn/examples/multi_input
+cd /data/github_codes/server/build/rknn/examples/multi_input
 python test_multi_input.py
 
 # multi input result shape
@@ -50,7 +50,7 @@ python test_multi_input.py
 
 ### 5 ensemble_mobilenet 模型测试(ensemble+python)
 ```
-cd /data/github_codes/server/build_test/rknn/examples/ensemble_mobilenet
+cd /data/github_codes/server/build/rknn/examples/ensemble_mobilenet
 python test_ensemble_mobilenet.py --image ../single_input/dog_224x224.jpg --label_file ../single_input/labels.txt
 
 # Result is class: Shih-Tzu
