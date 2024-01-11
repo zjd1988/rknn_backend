@@ -224,7 +224,7 @@ cp -r /tmp/tritonbuild/rknn/install/backends/rknn /tmp/tritonbuild/install/backe
 ########
 ```
 
-### 5 启动triton-server镜像测试
+### 5 启动triton-server镜像测试npu是否可用
 ```
 cd /data/github_codes
 git clone -b v1.5.2 https://github.com/rockchip-linux/rknpu2.git
