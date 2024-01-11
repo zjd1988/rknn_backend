@@ -1,4 +1,4 @@
-### 1 拉取triton-server仓库 
+### 1 拉取triton-server仓库和安装相关依赖
 ```
 # 以我本地的硬件和环境为例(使用orange pi 5b, 镜像版本Orangepi5b_1.0.4_ubuntu_jammy_server_linux5.10.110.7z),
 # 交叉编译暂时没尝试
@@ -7,6 +7,11 @@ cd /data/github_codes
 git clone https://github.com/triton-inference-server/server.git
 cd /data/github_codes/server/
 cd server && git checkout r23.12
+
+cd /data/github_codes/
+wget https://jaist.dl.sourceforge.net/project/boost/boost/1.80.0/boost_1_80_0.tar.gz && \
+    tar xzf boost_1_80_0.tar.gz && cd boost_1_80_0 && ./bootstrap.sh --prefix=/usr && \
+    ./b2 install &&  mv /data/github_codes/boost_1_80_0/boost /usr/include/boost
 ```
 
 ### 2 切换到server目录，执行python ./build.py 生成cmake_build编译脚本
