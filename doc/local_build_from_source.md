@@ -242,7 +242,7 @@ cp -r /data/github_codes/server/build/rknn/install/backends/rknn /data/github_co
 ########
 ```
 
-### 5 本地测试npu是否正常使用
+### 5 本地测试npu是否可用
 ```
 cd /data/github_codes
 git clone -b v1.5.2 https://github.com/rockchip-linux/rknpu2.git
@@ -251,6 +251,8 @@ cd ./rknpu2/examples/rknn_yolov5_demo
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/data/github_codes/rknpu2/examples/rknn_yolov5_demo/install/rknn_yolov5_demo_Linux/lib/
 ./install/rknn_yolov5_demo_Linux/rknn_yolov5_demo model/RK3588/yolov5s-640-640.rknn model/bus.jpg
+
+待补充
 
 ```
 
