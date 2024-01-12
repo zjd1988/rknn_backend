@@ -131,12 +131,45 @@ cp /data/github_codes/server/TRITON_VERSION /data/github_codes/server/build/opt/
 
 ### 3-2 编译python后端代码
 ```
-# 需要修改/data/github_codes/server/build/python 中CMakeLists.txt
+# 1 需要修改/data/github_codes/server/build/python 中CMakeLists.txt
 # boost下载失败, 将
 # https://boostorg.jfrog.io/artifactory/main/release/1.79.0/source/boost_1_79_0.tar.gz
 # 替换为
 # https://jaist.dl.sourceforge.net/project/boost/boost/1.79.0/boost_1_79_0.tar.gz
 
+# 2 修改/data/github_codes/server/build/python/src/pb_stub.cc文件的ModelContext::Init函数
+# ....
+#if 0
+  if (runtime_modeldir != "DEFAULT") {
+    // For python based backends, existence of `model.py` in the corresponding
+    // backend folder happens on the core side, so we can omit this check here.
+    python_model_path_ = runtime_modeldir + "/model.py";
+    type_ = ModelType::BACKEND;
+  } else {
+    python_model_path_ = model_path;
+    // Check if model file exists in this path.
+    struct stat buffer;
+    if (stat(python_model_path_.c_str(), &buffer) != 0) {
+      throw PythonBackendException(
+          ("Python model file not found in \'" + model_path + "\'"));
+    }
+  }
+#endif
+  python_model_path_ = model_path;
+  // Check if model file exists in this path.
+  struct stat buffer;
+  if (stat(python_model_path_.c_str(), &buffer) != 0) {
+    throw PythonBackendException(
+        ("Python model file not found in \'" + model_path + "\'"));
+  }
+
+  model_dir_ = model_path.substr(0, model_path.find_last_of("\\/"));
+  python_backend_folder_ = triton_install_path;
+  model_version_ = model_version;
+  runtime_modeldir_ = runtime_modeldir;
+}
+
+# ....
 
 ########
 # 'python' backend
