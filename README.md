@@ -54,6 +54,19 @@ python -m pip install tritonclient[all]
 cd /data/github_codes/server/build/rknn/examples/yolov5
 python test_yolov5.py
 
+--> Running model
+0: infer 0
+class: person, score: 0.819098949432373
+box coordinate left,top,right,down: [114.69233334064484, 235.684387922287, 212.63444888591766, 527.1685173511505]
+class: person, score: 0.8149696588516235
+box coordinate left,top,right,down: [210.97113871574402, 242.16578316688538, 284.33705830574036, 509.1424443721771]
+class: person, score: 0.7903112769126892
+box coordinate left,top,right,down: [479.5874242782593, 235.37401449680328, 561.1043481826782, 520.7360318899155]
+class: person, score: 0.4049600064754486
+box coordinate left,top,right,down: [78.8878903388977, 338.7200300693512, 122.68799161911011, 520.08789229393]
+class: bus , score: 0.6933198571205139
+box coordinate left,top,right,down: [99.32104778289795, 141.9212429523468, 557.3707246780396, 445.96871066093445]
+
 # 可以通过修改/data/github_codes/server/build/rknn/examples/models/yolov5/config.pbtxt
 # 配置模型实例个数和模型加载的npu核id
 # 注：目前，暂时不支持模型core_mask按RKNN_NPU_CORE_0_1和RKNN_NPU_CORE_0_1_2进行加载
@@ -65,10 +78,11 @@ python test_yolov5.py
 cd /data/github_codes/server/build/rknn/examples/single_input
 python test_single_input.py
 
-# mobilenet test top3 result
-# Shih-Tzu:0.984375
-# Pekinese:0.0078125
-# Lhasa:0.00390625
+--> Running model
+0: infer 0
+Shih-Tzu:0.984375
+Pekinese:0.0078125
+Lhasa:0.00390625
 ```
 
 ### 4 multi_input 模型测试
@@ -76,8 +90,9 @@ python test_single_input.py
 cd /data/github_codes/server/build/rknn/examples/multi_input
 python test_multi_input.py
 
-# multi input result shape
-# (1, 8, 128, 128)
+--> Running model
+0: infer 0
+(1, 8, 128, 128)
 ```
 
 ### 5 ensemble_mobilenet 模型测试(ensemble+python)
