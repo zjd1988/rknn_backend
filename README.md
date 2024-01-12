@@ -1,6 +1,19 @@
 # rknn_backend
 ## 零 环境依赖
-### 1 安装miniconda
+### 1 卸载原来系统安装的python
+```
+# 如果系统自带python大于3.6没有问题，否则最好进行卸载, 然后用miniconda构建虚拟环境
+# 卸载步骤参考：
+sudo apt-get remove python3
+
+sudo rm -r /etc/py*
+sudo rm -r /usr/bin/py*
+sudo rm -r /usr/lib/py*
+sudo rm -r /usr/local/lib/py*
+sudo rm -r /usr/share/py*
+sudo rm -r /usr/share/man/man1/py*
+```
+### 2 安装miniconda
 ```
 mkdir -p ~/miniconda3
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh -O ~/miniconda3/miniconda.sh
@@ -8,7 +21,7 @@ bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3
 rm -rf ~/miniconda3/miniconda.sh
 ```
 
-### 2 创建虚拟环境并安装python包
+### 3 创建虚拟环境并安装python包
 ```
 conda create -n triton_rknn python=3.10
 python -m pip install tritonclient[all]
