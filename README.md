@@ -65,17 +65,8 @@ Pekinese:0.0078125
 Lhasa:0.00390625
 ```
 
-### 4 multi_input 模型测试
-```
-cd /data/github_codes/server/build/rknn/examples/multi_input
-python test_multi_input.py
 
---> Running model
-0: infer 0
-(1, 8, 128, 128)
-```
-
-### 5 ensemble_mobilenet 模型测试(ensemble+python)
+### 4 ensemble_mobilenet 模型测试(ensemble+python)
 ```
 cd /data/github_codes/server/build/rknn/examples/ensemble_mobilenet
 python test_ensemble_mobilenet.py --image ../single_input/dog_224x224.jpg --label_file ../single_input/labels.txt
