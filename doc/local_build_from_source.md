@@ -5,13 +5,12 @@
 
 cd /data/github_codes
 git clone https://github.com/triton-inference-server/server.git
-cd /data/github_codes/server/
-cd server && git checkout r23.12
+cd /data/github_codes/server/ && git checkout r23.12
 
 cd /data/github_codes/
 wget https://jaist.dl.sourceforge.net/project/boost/boost/1.80.0/boost_1_80_0.tar.gz && \
     tar xzf boost_1_80_0.tar.gz && cd boost_1_80_0 && ./bootstrap.sh --prefix=/usr && \
-    ./b2 install &&  mv /data/github_codes/boost_1_80_0/boost /usr/include/boost
+    sudo ./b2 install &&  sudo mv /data/github_codes/boost_1_80_0/boost /usr/include/boost
 ```
 
 ## 2 切换到server目录，执行python ./build.py 生成cmake_build编译脚本
