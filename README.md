@@ -1,6 +1,5 @@
 # rknn_backend
 ## 零 环境依赖
-### 1 卸载原来系统安装的python
 ```
 使用 Orangepi5b_1.0.4_ubuntu_jammy_desktop_xfce_linux5.10.110 镜像, 自带了python3 和docker, 使用默认的即可
 python -m pip install tritonclient[all]
