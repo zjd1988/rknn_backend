@@ -31,7 +31,6 @@ cd /data/github_codes/server
 ### 2 yolov5模型测试
 ```
 # 需要预先在python环境安装 tritonclient
-python -m pip install tritonclient[all]
 cd /data/github_codes/server/build/rknn/examples/yolov5
 python test_yolov5.py
 

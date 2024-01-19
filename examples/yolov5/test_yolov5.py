@@ -292,7 +292,7 @@ def yolov5_work_func(pid):
     # 5 save result
     cv2.imwrite("detect_result.jpg", img_1)
 
-if __name__ == '__main__':    
+if __name__ == '__main__':
     process_num = 1
     process_list = []
     for pid in range(process_num):
