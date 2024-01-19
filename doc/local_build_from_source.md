@@ -11,6 +11,12 @@ cd /data/github_codes/
 wget https://jaist.dl.sourceforge.net/project/boost/boost/1.80.0/boost_1_80_0.tar.gz && \
     tar xzf boost_1_80_0.tar.gz && cd boost_1_80_0 && ./bootstrap.sh --prefix=/usr && \
     sudo ./b2 install &&  sudo mv /data/github_codes/boost_1_80_0/boost /usr/include/boost
+
+sudo apt-get install rapidjson-dev -y --no-install-recommends  ca-certificates autoconf \
+ automake build-essential gperf libre2-dev rapidjson-dev scons \
+ software-properties-common pkg-config unzip zlib1g-dev libarchive-dev \
+ libxml2-dev libnuma-dev libssl-dev libtool libcurl4-openssl-dev libb64-dev \
+ libgoogle-perftools-dev patchelf
 ```
 
 ## 2 切换到server目录，执行python ./build.py 生成cmake_build编译脚本
