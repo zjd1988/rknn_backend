@@ -2,8 +2,12 @@
 ## 零 环境依赖
 ```
 使用 Orangepi5b_1.0.4_ubuntu_jammy_desktop_xfce_linux5.10.110 镜像, 自带了python3 和docker, 使用默认的即可
-python -m pip install tritonclient[all]
-python -m pip install numpy opencv-python
+cd /data/github_codes/
+wget https://bootstrap.pypa.io/get-pip.py
+python get-pip.py
+python -m pip install requests -i https://pypi.tuna.tsinghua.edu.cn/simple/
+python -m pip install tritonclient[all] -i https://pypi.tuna.tsinghua.edu.cn/simple/
+python -m pip install numpy opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple/
 ```
 
 ## 一 编译步骤
